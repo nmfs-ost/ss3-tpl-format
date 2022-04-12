@@ -1,5 +1,5 @@
 # tpl-format
- Fix problems in tpl code after formatting with clang-format
+ Fix most problems in tpl code after formatting with clang-format
  
  ## usage
  ### tpl-format (filename)
