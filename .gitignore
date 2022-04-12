@@ -1,0 +1,6 @@
+build
+*.o
+moc_*.h
+mod_*.cpp
+Makefile.*
+*.stash
