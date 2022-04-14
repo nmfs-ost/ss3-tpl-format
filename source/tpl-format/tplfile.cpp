@@ -80,8 +80,11 @@ QString &tplFile::processLine(QString &txt)
             txt = txt.trimmed();
         }
 
-        if        (first.startsWith("FUNCTION")
-                || first.startsWith("SEPARABLE_FUNCTION")
+        if        (first.startsWith("FUNCTION"))
+        {
+            txt.replace(" (", "(");
+        }
+        else if   (first.startsWith("SEPARABLE_FUNCTION")
                 || first.startsWith("DATA_SECTION")
                 || first.startsWith("INITIALIZATION_SECTION")
                 || first.startsWith("PARAMETER_SECTION")
