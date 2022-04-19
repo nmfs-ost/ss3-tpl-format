@@ -22,3 +22,6 @@ HEADERS += \
     arguments.h \
     tplfile.h \
     tplformat.h
+
+DISTFILES += \
+    ../../README.md
