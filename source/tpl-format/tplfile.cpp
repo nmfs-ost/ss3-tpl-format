@@ -66,7 +66,9 @@ void tplFile::process(arguments &args)
 
 QString &tplFile::processLine(QString &txt)
 {
+    QString txtsimp(txt);
     QStringList tokens = txt.split(' ', QString::SkipEmptyParts);
+    txtsimp = txtsimp.simplified();
     if (tokens.count() > 0)
     {
         QString first = tokens.at(0);
@@ -75,7 +77,8 @@ QString &tplFile::processLine(QString &txt)
             txt.prepend("  ");
         }
         else if    (first.startsWith("init")
-                 || first.startsWith("!!"))
+                 || first.startsWith("!!")
+                 || txtsimp.isEmpty())
         {
             txt = txt.trimmed();
         }
@@ -110,11 +113,16 @@ QString &tplFile::processLine(QString &txt)
                 localCalcsSection = false;
             txt = QString(" ") + first;
         }
+        else if   (txt.compare(QString("  ")) == 0)
+        {
+            txt.clear();
+        }
         else if   (txt.startsWith("/*"))
         {
             txt.prepend(" ");
         }
-        else if   (first.startsWith("//")
+        else if   (txtsimp.isEmpty()
+                || first.startsWith("//")
                 || txt.startsWith("  ")
                 || first.startsWith("!!"))
         {}

@@ -7,6 +7,8 @@
 
 ## History
 
+  - 2020-04-19 ver 1.0.1
+    - Changed so that blank lines are kept blank. 
 
-  - 20220-04-19 ver 1.0
+  - 20220-04-17 ver 1.0
     - Works on most files. Not on SS_param.tpl or SS_read* files.
