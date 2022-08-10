@@ -42,9 +42,11 @@ void tplFile::process(arguments &args)
         if (open(QIODevice::WriteOnly))
         {
             lines = textin.split('\n');
+//            determineLineEnding(lines.at(0));
             for (int i = 0; i < lines.count(); i++)
             {
                 line = lines.at(i);
+//                line.replace(lineEnd, QString());
                 line = processLine(line);
                 line.append('\n');
                 write(line.toUtf8());
@@ -67,8 +69,14 @@ void tplFile::process(arguments &args)
 QString &tplFile::processLine(QString &txt)
 {
     QString txtsimp(txt);
-    QStringList tokens = txt.split(' ', QString::SkipEmptyParts);
     txtsimp = txtsimp.simplified();
+    QStringList tokens = txtsimp.split(' ', QString::SkipEmptyParts);
+    QString lineEnd = QString();
+    QString lineEndFull;
+    if (txt.contains("\r"))
+        lineEnd = QString("\r");
+    lineEndFull = lineEnd + QString("\n");
+
     if (tokens.count() > 0)
     {
         QString first = tokens.at(0);
@@ -76,11 +84,24 @@ QString &tplFile::processLine(QString &txt)
         {
             txt.prepend("  ");
         }
-        else if    (first.startsWith("init")
-                 || first.startsWith("!!")
-                 || txtsimp.isEmpty())
+        else if    (first.startsWith("init_dvector")
+                 || first.startsWith("init_ivector")
+                 || first.startsWith("init_vector"))
         {
-            txt = txt.trimmed();
+            if    (first.contains("vector"))
+            {
+                txt.replace(", ", ",");
+            }
+        }
+        if         (txt.contains("!!")
+                && !first.startsWith("!!"))
+        {
+            if    (txt.contains(" !! "))
+                txt.replace (" !!", (lineEndFull + QString("  !!")));
+            else if (txt.contains("!! "))
+                txt.replace("!! ", (lineEndFull + QString("  !! ")));
+            else
+                txt.replace("!!", (lineEndFull + QString("  !! ")));
         }
 
         if        (first.startsWith("FUNCTION"))
@@ -113,16 +134,15 @@ QString &tplFile::processLine(QString &txt)
                 localCalcsSection = false;
             txt = QString(" ") + first;
         }
-        else if   (txt.compare(QString("  ")) == 0)
+        else if   (txtsimp.isEmpty())
         {
-            txt.clear();
+            txt = lineEnd;
         }
         else if   (txt.startsWith("/*"))
         {
             txt.prepend(" ");
         }
-        else if   (txtsimp.isEmpty()
-                || first.startsWith("//")
+        else if   (first.startsWith("//")
                 || txt.startsWith("  ")
                 || first.startsWith("!!"))
         {}
@@ -132,4 +152,20 @@ QString &tplFile::processLine(QString &txt)
         }
     }
     return txt;
+}
+
+QString &tplFile::determineLineEnding(QString line)
+{
+    if (line.contains("\r"))
+    {
+            if (line.contains("\n"))
+                lineEnd = QString("\r\n"); // Windows
+            else
+                lineEnd = QString("\r"); // Macintosh
+    }
+    else
+    {
+        lineEnd = QString("\n"); // OSX and Linux
+    }
+    return lineEnd;
 }

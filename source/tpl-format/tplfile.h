@@ -15,7 +15,10 @@ public:
     void process(arguments &args);
     QString &processLine(QString &txt);
 
+    QString &determineLineEnding(QString line);
+
 private:
+    QString lineEnd;
     bool localCalcsSection;
 };
 

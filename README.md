@@ -3,7 +3,7 @@
 
  ## Usage
  ### tpl-format (filename)
-  - filename : the name of the file to fix. The text in the file is replaced.
+  - filename : the name of the file to fix. The text in the file is parsed and replaced.
 
 ## History
 
