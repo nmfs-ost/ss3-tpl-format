@@ -15,5 +15,5 @@
     - Changed so that blank lines are kept blank.
 
 
-  - 20220-04-17 ver 1.0
+  - 2020-04-17 ver 1.0
     - Works on most files.
